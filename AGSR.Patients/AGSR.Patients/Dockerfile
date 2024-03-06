@@ -6,17 +6,17 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["AGSR.Patients/AGSR.Patients.csproj", "AGSR.Patients/"]
-RUN dotnet restore "./AGSR.Patients/AGSR.Patients.csproj"
-COPY . .
+COPY ["AGSR.Patients.csproj", "AGSR.Patients/"]
+RUN dotnet restore "AGSR.Patients/AGSR.Patients.csproj"
+
 WORKDIR "/src/AGSR.Patients"
-RUN dotnet build "./AGSR.Patients.csproj" -c $BUILD_CONFIGURATION -o /app/build
+COPY . .
+
+RUN dotnet build "AGSR.Patients.csproj" -c Release -o /app/build
 
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./AGSR.Patients.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "AGSR.Patients.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
