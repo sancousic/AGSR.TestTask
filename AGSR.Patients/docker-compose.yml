@@ -2,24 +2,27 @@ version: '3.9'
 services:
   web_api:
     image: web_api
-    build: ./AGSR.Patients
+    build: ./
     container_name: web_api_application
+    #command: bash -c "openssl pkcs12 -in /https/aspnetapp.pfx -nokeys -out aspnetapp.crt -nodes -password pass:Sasha! && mv aspnetapp.crt /usr/local/share/ca-certificates/aspnetapp.crt && update-ca-certificates && dotnet AGSR.Patients.dll"
+    restart: always
     ports:
       - "5000:80"
       - "5001:443"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-      - ASPNETCORE_HTTPS_PORT=443
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=<YOUR PASSWORD>
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      ASPNETCORE_URLS: https://+:443;http://+:80
+      ASPNETCORE_HTTPS_PORT: 443
+      ASPNETCORE_Kestrel__Certificates__Default__Password: ${SERTIFICATE_PASSWORD}
+      ASPNETCORE_Kestrel__Certificates__Default__Path: /https/aspnetapp.pfx  
+      ConnectionStrings__ConfigConnection: Server=database.AGSR_sql_server2022; Database=AGSR.PacientConfigDb; User Id=SA; Password=${SA_PASSWORD}; Trusted_Connection=True; MultipleActiveResultSets=true; TrustServerCertificate=true; Integrated Security = false;                      
     volumes:
       - ~/.aspnet/https:/https:ro
   sql:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
+    hostname: database.AGSR_sql_server2022
     container_name: AGSR_sql_server2022
     ports:
       - "1433:1433"
     environment:
-        - ACCEPT_EULA=y
-        - SA_PASSWORD=<SA_PASSWORD>
+        - ACCEPT_EULA="Y"
+        - SA_PASSWORD=${SA_PASSWORD}

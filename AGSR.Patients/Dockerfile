@@ -7,12 +7,9 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["AGSR.Patients.csproj", "AGSR.Patients/"]
-RUN dotnet restore "AGSR.Patients/AGSR.Patients.csproj"
-
-WORKDIR "/src/AGSR.Patients"
 COPY . .
-
+RUN dotnet restore "AGSR.Patients/AGSR.Patients.csproj"
+WORKDIR "/src/AGSR.Patients"
 RUN dotnet build "AGSR.Patients.csproj" -c Release -o /app/build
 
 FROM build AS publish

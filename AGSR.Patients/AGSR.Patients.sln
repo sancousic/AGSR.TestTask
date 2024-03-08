@@ -12,7 +12,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.dockerignore = .dockerignore
 		docker-compose.yml = docker-compose.yml
 		..\README.md = ..\README.md
+		template.env = template.env
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{00E58687-64F3-4243-9427-122EDD95828E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AGSR.Patients.Test", "Tests\AGSR.Patients.Test\AGSR.Patients.Test.csproj", "{F33F07E7-C7CD-4AF2-8D27-899FFD2973FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,9 +33,16 @@ Global
 		{1667E433-4103-4844-BE63-BE89E14C08E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1667E433-4103-4844-BE63-BE89E14C08E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1667E433-4103-4844-BE63-BE89E14C08E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F33F07E7-C7CD-4AF2-8D27-899FFD2973FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F33F07E7-C7CD-4AF2-8D27-899FFD2973FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F33F07E7-C7CD-4AF2-8D27-899FFD2973FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F33F07E7-C7CD-4AF2-8D27-899FFD2973FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F33F07E7-C7CD-4AF2-8D27-899FFD2973FF} = {00E58687-64F3-4243-9427-122EDD95828E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3E1106B8-41A2-439E-BB92-507F3E4AC376}

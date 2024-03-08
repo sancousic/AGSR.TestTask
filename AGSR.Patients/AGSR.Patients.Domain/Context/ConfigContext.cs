@@ -16,9 +16,6 @@ namespace AGSR.Patients.Domain.Context
 
             this.connectionString = connectionString
                 ?? throw new ArgumentNullException("No connection string found in configuration");
-
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
         }
 
         public DbSet<Name> Names { get; set; } = null!;
@@ -33,6 +30,17 @@ namespace AGSR.Patients.Domain.Context
             {
                 optionsBuilder.UseSqlServer(connectionString);
             }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Patient>()
+                .HasOne(p => p.Name)
+                .WithOne(p => p.Patient)
+                .HasForeignKey<Name>(p => p.Id)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

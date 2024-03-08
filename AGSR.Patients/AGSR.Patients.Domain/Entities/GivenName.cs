@@ -1,11 +1,14 @@
-﻿namespace AGSR.Patients.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace AGSR.Patients.Domain.Entities
 {
-    public class GivenName
+    public class GivenName : IEntity
     {
-        public Guid Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid? Id { get; set; }
 
         public string? Value { get; set; }
 
-        public IEnumerable<Name>? Name { get; set; }
+        public Name Name { get; set; } = null!;
     }
 }

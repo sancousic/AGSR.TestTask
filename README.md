@@ -22,3 +22,7 @@ And change cert password in docker-compose file:
 ```
       - ASPNETCORE_Kestrel__Certificates__Default__Password=<YOUR PASSWORD HERE>
 ```
+
+docker-compose up -d web_api --build
+
+docker logs web_api_application
