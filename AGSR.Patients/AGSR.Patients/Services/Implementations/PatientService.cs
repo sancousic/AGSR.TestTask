@@ -1,4 +1,6 @@
-﻿using AGSR.Patients.DateSearch;
+﻿using System.Data.Entity;
+using AGSR.Patients.DataSearch.Models;
+using AGSR.Patients.DateSearch;
 using AGSR.Patients.Domain.Entities;
 using AGSR.Patients.Domain.Repositories;
 using AGSR.Patients.Models;
@@ -10,62 +12,67 @@ namespace AGSR.Patients.Services.Implementations
 {
     public class PatientService : IPatientService
     {
-        private readonly IPatientRepository repository;
-        private readonly IPeriodInfoUtiluty periodInfoUtiluty;
-        private readonly IPredicateBuilder<PatientEntity> predicateBuilder;
-        protected readonly IMapper mapper;
+        private readonly IPatientRepository _repository;
+        private readonly IMapper _mapper;
 
         public PatientService(
             IPatientRepository repository,
-            IMapper mapper,
-            IPeriodInfoUtiluty periodInfoUtiluty,
-            IPredicateBuilder<PatientEntity> predicateBuilder)
+            IMapper mapper)
         {
-            this.repository = repository;
-            this.mapper = mapper;
-            this.periodInfoUtiluty = periodInfoUtiluty;
-            this.predicateBuilder = predicateBuilder;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<PatientModel> CreatePatient(PatientModel model)
         {
-            var entity = mapper.Map<Patient>(model);
+            var entity = _mapper.Map<Patient>(model);
 
-            var result = await repository.CreateAsync(entity);
+            var result = await _repository.CreateAsync(entity);
 
-            return mapper.Map<PatientModel>(result);
+            return _mapper.Map<PatientModel>(result);
         }
 
         public async Task<bool> DeletePatient(Guid id)
         {
-            return await repository.DeleteAsync(id);
+            return await _repository.DeleteAsync(id);
         }
 
         public async Task<PatientModel> GetPatientById(Guid id)
         {
-            var patient = await repository.GetByIdAsync(id);
+            var patient = await _repository.GetByIdAsync(id);
 
-            return mapper.Map<PatientModel>(patient);
+            return _mapper.Map<PatientModel>(patient);
         }
 
         public async Task<bool> IsPatientExists(Guid id)
         {
-            return repository.Query().Any(x => x.Name.Id == id);
+            return await _repository.Query().AnyAsync(x => x.Name.Id == id);
         }
 
         public async Task<IEnumerable<PatientModel>> SearchPatientsByDate(IEnumerable<DateSearchModel> dates)
         {
-            var infos = periodInfoUtiluty.GetPeriodInfos(dates).ToList();
-            var predicate = predicateBuilder.BuildPredicate(infos);
+            var factory = new PeriodInfoFactory<PatientEntity>(patient =>
+                new PeriodInfo(
+                    new DateTimePoint(patient.BirthDate, true),
+                    new DateTimePoint(patient.BirthDate, true)));
 
-            return mapper.Map<IEnumerable<PatientModel>>(repository.Query().Where(predicate).ToList());
+            var predicates = dates.Select(x => factory.GetBuilder(x.Prefix).BuildPredicate(x.Data));
+
+            var predicateBuilder = PredicateBuilder.New<PatientEntity>();
+            foreach (var predicate in predicates)
+            {
+                predicateBuilder.And(x => predicate(x));
+            }
+
+
+            return _mapper.Map<IEnumerable<PatientModel>>(_repository.Query().Where(predicateBuilder).ToList());
         }
 
         public async Task<PatientModel?> UpdatePatient(PatientModel patient)
         {
-            var updated = await repository.UpdateAsync(mapper.Map<Patient>(patient));
+            var updated = await _repository.UpdateAsync(_mapper.Map<Patient>(patient));
 
-            return mapper.Map<PatientModel>(updated);
+            return _mapper.Map<PatientModel>(updated);
         }
     }
 }

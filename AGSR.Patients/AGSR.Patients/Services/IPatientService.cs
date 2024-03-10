@@ -1,4 +1,5 @@
-﻿using AGSR.Patients.DateSearch;
+﻿using AGSR.Patients.DataSearch.Models;
+using AGSR.Patients.DateSearch;
 using AGSR.Patients.Models;
 
 namespace AGSR.Patients.Services

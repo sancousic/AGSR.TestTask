@@ -26,4 +26,6 @@
     <ProjectReference Include="..\AGSR.Patients.Domain\AGSR.Patients.Domain.csproj" />
   </ItemGroup>
 
+
+
 </Project>

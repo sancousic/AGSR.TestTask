@@ -1,3 +1,4 @@
+using AGSR.Patients.DataSearch.Models;
 using AGSR.Patients.DateSearch;
 using AGSR.Patients.Models;
 using AGSR.Patients.Requests;
@@ -44,7 +45,13 @@ namespace AGSR.Patients.Controllers
                 validator,
                  async (r) =>
                  {
-                     var dateSearchModels = request.date.Select(x => new DateSearchModel(x));
+                     var dateSearchModels = request.date.Select(x =>
+                     {
+                         var model = new DateSearchModel(x);
+                         model.Init();
+
+                         return model;
+                     });
 
                      var patients = await patientService.SearchPatientsByDate(dateSearchModels);
 

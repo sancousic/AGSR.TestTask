@@ -13,9 +13,6 @@ namespace AGSR.Patients.Extensions
         public static void AddServices(this IServiceCollection services)
         {
             services.AddScoped<IPatientService, PatientService>();
-            services.AddScoped<IPeriodInfoFactory, PeriodInfoFactory>();
-            services.AddScoped<IPeriodInfoUtiluty, PeriodInfoUtiluty>();
-            services.AddScoped<IPredicateBuilder<PatientEntity>, DatePredicateBuilder>();
             services.AddAutoMapperProfiles();
             services.AddValidators();
         }

@@ -7,7 +7,7 @@ namespace AGSR.Patients.Domain.Entities
     public class Patient : IEntity
     {
         [ForeignKey("Id")]
-        public Name? Name { get; set; } = new();
+        public Name Name { get; set; } = new();
 
         [Required]
         public DateTimeOffset BirthDate { get; set; }
