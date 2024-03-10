@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "AGSR.DataTool": {
+      "commandName": "Project",
+      "commandLineArgs": "--help"
+    },
+    "Profile 1": {
+      "commandName": "Project"
+    }
+  }
+}
