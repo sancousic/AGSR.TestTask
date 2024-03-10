@@ -16,6 +16,6 @@ namespace AGSR.Patients.Services
 
         Task<bool> IsPatientExists(Guid id);
 
-        Task<IEnumerable<PatientModel>> SearchPatientsByDate(IEnumerable<DateSearchModel> dates);
+        IEnumerable<PatientModel> SearchPatientsByDate(IEnumerable<DateSearchModel> dates);
     }
 }

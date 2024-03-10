@@ -15,11 +15,14 @@ public class DateSearchModel : DataSearchModel<PeriodInfo>
 
     public override void Init()
     {
-        if (DateTimeOffset.Now.TryParseExactWithFormat(Search[2..], CultureInfo.InvariantCulture,
-                DateTimeStyles.None, out var format, out var date))
+        if (DateTimeOffset.Now.TryParseExactWithFormat(Search[2..], CultureInfo.CurrentCulture,
+                DateTimeStyles.AssumeLocal, out var format, out var date))
         {
             Format = format;
+
             Data = GetEndDate(date.Value);
+
+            return;
         }
 
         throw new ArgumentException();
@@ -35,11 +38,9 @@ public class DateSearchModel : DataSearchModel<PeriodInfo>
             DateTimeFormats.HourFormat => date.AddHours(1),
             DateTimeFormats.MinuteFormat => date.AddMinutes(1),
             DateTimeFormats.SecondFormat => date.AddSeconds(1),
-            DateTimeFormats.MilisecondFormat => date.AddMilliseconds(1),
+            DateTimeFormats.MillisecondFormat => date.AddMilliseconds(1),
             _ => throw new NotSupportedException(),
         };
-
-        endDate = endDate.AddMilliseconds(-1);
 
         return new PeriodInfo(new DateTimePoint(date, true), new DateTimePoint(endDate, true), true);
     }

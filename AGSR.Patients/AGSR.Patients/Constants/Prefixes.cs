@@ -2,36 +2,36 @@
 {
     public static class Prefixes
     {
-        public const string Equals = "eq";
+        public const string EqualsPrefix = "eq";
 
-        public const string NotEquals = "ne";
+        public const string NotEqualsPrefix = "ne";
 
-        public const string GreaterThan = "gt";
+        public const string GreaterThanPrefix = "gt";
 
-        public const string GreaterOrEqueal = "ge";
+        public const string GreaterOrEqualsPrefix = "ge";
 
-        public const string LessThan = "lt";
+        public const string LessThanPrefix = "lt";
 
-        public const string LessOrEqual = "le";
+        public const string LessOrEqualPrefix = "le";
 
-        public const string StartAfter = "sa";
+        public const string StartAfterPrefix = "sa";
 
-        public const string EndsBefore = "eb";
+        public const string EndsBeforePrefix = "eb";
 
-        public const string ApproximatelySame = "ap";
+        public const string ApproximatelySamePrefix = "ap";
 
-        public static IEnumerable<string> ValidPrefixes
+        public static readonly IEnumerable<string> ValidPrefixes
             = new[]
             {
-                Equals,
-                NotEquals,
-                GreaterThan,
-                LessThan,
-                StartAfter,
-                GreaterOrEqueal,
-                LessOrEqual,
-                ApproximatelySame,
-                EndsBefore,
+                EqualsPrefix,
+                NotEqualsPrefix,
+                GreaterThanPrefix,
+                LessThanPrefix,
+                StartAfterPrefix,
+                GreaterOrEqualsPrefix,
+                LessOrEqualPrefix,
+                ApproximatelySamePrefix,
+                EndsBeforePrefix,
             };
     }
 }

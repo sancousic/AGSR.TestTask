@@ -1,6 +1,5 @@
 ﻿using System.Data.Entity;
 using AGSR.Patients.DataSearch.Models;
-using AGSR.Patients.DateSearch;
 using AGSR.Patients.Domain.Entities;
 using AGSR.Patients.Domain.Repositories;
 using AGSR.Patients.Models;
@@ -49,21 +48,16 @@ namespace AGSR.Patients.Services.Implementations
             return await _repository.Query().AnyAsync(x => x.Name.Id == id);
         }
 
-        public async Task<IEnumerable<PatientModel>> SearchPatientsByDate(IEnumerable<DateSearchModel> dates)
+        public IEnumerable<PatientModel> SearchPatientsByDate(IEnumerable<DateSearchModel> dates)
         {
-            var factory = new PeriodInfoFactory<PatientEntity>(patient =>
-                new PeriodInfo(
-                    new DateTimePoint(patient.BirthDate, true),
-                    new DateTimePoint(patient.BirthDate, true)));
-
-            var predicates = dates.Select(x => factory.GetBuilder(x.Prefix).BuildPredicate(x.Data));
+            var factories = dates.Select(x => new PeriodInfoFactory(x));
+            var specs = factories.Select(x => x.GetBuilder().ToExpressions());
 
             var predicateBuilder = PredicateBuilder.New<PatientEntity>();
-            foreach (var predicate in predicates)
+            foreach (var spec in specs)
             {
-                predicateBuilder.And(x => predicate(x));
+                predicateBuilder.And(spec);
             }
-
 
             return _mapper.Map<IEnumerable<PatientModel>>(_repository.Query().Where(predicateBuilder).ToList());
         }

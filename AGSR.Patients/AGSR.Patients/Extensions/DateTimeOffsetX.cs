@@ -10,7 +10,7 @@ namespace AGSR.Patients.Extensions
             parsedFormat = null;
             dateTimeOffset = null;
 
-            foreach (var format in AllSupportedFormats)
+            foreach (var format in DateSupportedFormats)
             {
                 if(DateTimeOffset.TryParseExact(date, format, cultureInfo, style, out dateTime))
                 {

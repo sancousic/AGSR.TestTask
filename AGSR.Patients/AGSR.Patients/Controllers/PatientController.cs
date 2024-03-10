@@ -1,5 +1,4 @@
 using AGSR.Patients.DataSearch.Models;
-using AGSR.Patients.DateSearch;
 using AGSR.Patients.Models;
 using AGSR.Patients.Requests;
 using AGSR.Patients.Services;
@@ -53,7 +52,7 @@ namespace AGSR.Patients.Controllers
                          return model;
                      });
 
-                     var patients = await patientService.SearchPatientsByDate(dateSearchModels);
+                     var patients = patientService.SearchPatientsByDate(dateSearchModels);
 
                      return patients;
                  }
@@ -62,9 +61,9 @@ namespace AGSR.Patients.Controllers
         [HttpPut]
         public async Task<ActionResult<PatientModel>> UpdatePatient(PatientModel patient)
         {
-            var isPacientExists = await patientService.IsPatientExists(patient.Name.Id);
+            var isPatientExists = await patientService.IsPatientExists(patient.Name.Id);
 
-            if(!isPacientExists) 
+            if(!isPatientExists)
             {
                 return NotFound();
             }

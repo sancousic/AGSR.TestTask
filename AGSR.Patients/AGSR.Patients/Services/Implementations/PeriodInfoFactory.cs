@@ -1,34 +1,32 @@
 ﻿using AGSR.Patients.Constants;
-using AGSR.Patients.DataSearch.Builders;
-using AGSR.Patients.DataSearch.Builders.DatePredicateBuilder;
+using AGSR.Patients.DataSearch.Models;
+using AGSR.Patients.DataSearch.Specifications.DatePredicateBuilder.Patients.Date;
 using AGSR.Patients.DateSearch;
-using AGSR.Patients.DateSearch.Builders;
 using AGSR.Patients.Domain.Entities;
 
 namespace AGSR.Patients.Services.Implementations
 {
-    public class PeriodInfoFactory<T> : IPeriodInfoFactory<T>
-        where T: class, IEntity
+    public class PeriodInfoFactory : IPeriodInfoFactory<Patient, PeriodInfo>
     {
-        public PeriodInfoFactory(Func<T, PeriodInfo> getDataFunc)
+        private DateSearchModel SearchModel { get; }
+
+        public PeriodInfoFactory(DateSearchModel searchModel)
         {
-            GetDataFunc = getDataFunc;
+            this.SearchModel = searchModel;
         }
 
-        private Func<T, PeriodInfo> GetDataFunc { get; }
-
-        public IPredicateBuilder<T, PeriodInfo> GetBuilder(string prefix)
-            => prefix switch
+        public SpecificationBase<Patient, PeriodInfo> GetBuilder()
+            => SearchModel.Prefix switch
             {
-                Prefixes.Equals => new DateEqualsPeriodInfoBuilder<T>(GetDataFunc),
-                Prefixes.NotEquals => new DateEqualsPeriodInfoBuilder<T>(GetDataFunc),
-                Prefixes.GreaterThan => new DateGreatThanPeriodInfoBuilder<T>(GetDataFunc),
-                Prefixes.LessThan => new DateLessThanPeriodInfoBuilder<T>(GetDataFunc),
-                Prefixes.GreaterOrEqueal => new DateGreatOrEqualPeriodInfoBuilder<T>(GetDataFunc),
-                Prefixes.LessOrEqual => new DateLessOrEqualPeriodInfoBuilder<T>(GetDataFunc),
-                Prefixes.StartAfter => new DateStartAfterPeriodInfoBuilder<T>(GetDataFunc),
-                Prefixes.EndsBefore => new DateEndsBeforePeriodInfoBuilder<T>(GetDataFunc),
-                Prefixes.ApproximatelySame => new DateApproximatelySamePredicateBuilder<T>(GetDataFunc),
+                Prefixes.EqualsPrefix => new DateEqualsPeriodInfoBuilder(SearchModel.Data),
+                Prefixes.NotEqualsPrefix => new DateNotEqualsPeriodInfoBuilder(SearchModel.Data),
+                Prefixes.GreaterThanPrefix => new DateGreatThanPeriodInfoBuilder(SearchModel.Data),
+                Prefixes.LessThanPrefix => new DateLessThanPeriodInfoBuilder(SearchModel.Data),
+                Prefixes.GreaterOrEqualsPrefix => new DateGreatOrEqualPeriodInfoBuilder(SearchModel.Data),
+                Prefixes.LessOrEqualPrefix => new DateLessOrEqualPeriodInfoBuilder(SearchModel.Data),
+                Prefixes.StartAfterPrefix => new DateStartAfterPeriodInfoBuilder(SearchModel.Data),
+                Prefixes.EndsBeforePrefix => new DateEndsBeforePeriodInfoBuilder(SearchModel.Data),
+                Prefixes.ApproximatelySamePrefix => new DateApproximatelySamePredicateBuilder(SearchModel.Data),
                 _ => throw new NotSupportedException(),
             };
     }

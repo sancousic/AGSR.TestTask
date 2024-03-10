@@ -5,11 +5,11 @@ namespace AGSR.Patients.DataSearch.Models
 {
     public abstract class DataSearchModel<T>
     {
+        public string Prefix { get; protected set; }
+
         protected string Search { get; }
-
-        public string Prefix { get; set; }
-
-        public T? Data { get; set; }
+        
+        public T? Data { get; protected set; }
 
         protected DataSearchModel(string searchValue)
         {
@@ -21,7 +21,7 @@ namespace AGSR.Patients.DataSearch.Models
             {
                 prefix = prefix.Any(char.IsLetter)
                     ? throw new ArgumentException()
-                    : Prefixes.Equals;
+                    : Prefixes.EqualsPrefix;
             }
 
             Prefix = prefix;
