@@ -5,6 +5,7 @@ namespace AGSR.Patients.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Produces("application/json")]
     public class ApiControllerBase : ControllerBase
     {
         protected async Task<ActionResult<TRespone>> ValidateRequest<TRequest, TRespone>(

@@ -54,6 +54,7 @@ namespace AGSR.Patients.Services.Implementations
             var specs = factories.Select(x => x.GetBuilder().ToExpressions());
 
             var predicateBuilder = PredicateBuilder.New<PatientEntity>();
+
             foreach (var spec in specs)
             {
                 predicateBuilder.And(spec);
