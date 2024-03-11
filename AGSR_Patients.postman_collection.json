@@ -1,0 +1,360 @@
+{
+	"info": {
+		"_postman_id": "1b3b1494-0bb7-4051-b531-66a0a5e56bdb",
+		"name": "AGSR_Patients",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22739761"
+	},
+	"item": [
+		{
+			"name": "Create Patient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"patient_id\", jsonData.name.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": {\r\n    \"use\": \"official\",\r\n    \"family\": \"Znosak\",\r\n    \"givenNames\": [\r\n      \"Aliaxandr\",\r\n      \"Uladzimiravich\"\r\n    ]\r\n  },\r\n  \"birthDate\": \"1999-11-23\",\r\n  \"gender\": 0,\r\n  \"active\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{schema}}://{{base_url}}/{{resource_name}}",
+					"protocol": "{{schema}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"{{resource_name}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Patient by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{schema}}://{{base_url}}/{{resource_name}}/{{patient_id}}",
+					"protocol": "{{schema}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"{{resource_name}}",
+						"{{patient_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Wrong Get Patiet by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{schema}}://{{base_url}}/{{resource_name}}/123456",
+					"protocol": "{{schema}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"{{resource_name}}",
+						"123456"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Patient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Patient should be updated\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var name = jsonData.name;\r",
+							"    var patient_id = pm.collectionVariables.get(\"patient_id\");\r",
+							"\r",
+							"    pm.expect(name.id).to.eql(patient_id);\r",
+							"    pm.expect(name.use).to.eq(\"official-updated\");\r",
+							"    pm.expect(name.family).to.eq(\"Znosak-updated\");\r",
+							"    pm.expect(name.givenNames.count()).to.eq(1);\r",
+							"    pm.expect(name.givenNames[0]).to.eq(\"Aliaxandr-updated\");\r",
+							"    pm.expect(jsonData.birthDate).to.include('1999-11-24');\r",
+							"    pm.expect(jsonData.gender).to.eq(3);\r",
+							"    pm.expect(jsonData.active).to.eq(1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": {\r\n        \"id\": \"{{patient_id}}\",\r\n        \"use\": \"official-updated\",\r\n        \"family\": \"Znosak-updated\",\r\n        \"givenNames\": [\r\n            \"Aliaxandr-updated\"\r\n        ]\r\n    },\r\n    \"birthDate\": \"1999-11-24T00:00:00+00:00\",\r\n    \"gender\": 3,\r\n    \"active\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{schema}}://{{base_url}}/{{resource_name}}",
+					"protocol": "{{schema}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"{{resource_name}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EQ_Search",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.result.count).to.be(1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{schema}}://{{base_url}}/{{resource_name}}?date=eq1999",
+					"protocol": "{{schema}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"{{resource_name}}"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "eq1999"
+						},
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NE_Search",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.result.count).to.be(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{schema}}://{{base_url}}/{{resource_name}}?date=ne1999-11-24",
+					"protocol": "{{schema}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"{{resource_name}}"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "ne1999-11-24"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete patient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{schema}}://{{base_url}}/{{resource_name}}?id={{patient_id}}",
+					"protocol": "{{schema}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"{{resource_name}}"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{patient_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "localhost:5001",
+			"type": "string"
+		},
+		{
+			"key": "schema",
+			"value": "https",
+			"type": "string"
+		},
+		{
+			"key": "resource_name",
+			"value": "Patient",
+			"type": "string"
+		},
+		{
+			"key": "patient_id",
+			"value": ""
+		}
+	]
+}
