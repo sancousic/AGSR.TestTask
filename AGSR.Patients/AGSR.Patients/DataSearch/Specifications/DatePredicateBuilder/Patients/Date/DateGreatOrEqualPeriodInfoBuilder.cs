@@ -11,6 +11,6 @@ namespace AGSR.Patients.DataSearch.Specifications.DatePredicateBuilder.Patients.
         }
 
         public override Expression<Func<Patient, bool>> ToExpressions() =>
-            patient => Data.StartDate.Date >= patient.BirthDate;
+            patient => Data.StartDate.Date <= patient.BirthDate;
     }
 }

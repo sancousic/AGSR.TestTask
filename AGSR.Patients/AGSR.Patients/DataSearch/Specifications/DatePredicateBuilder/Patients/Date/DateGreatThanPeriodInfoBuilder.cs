@@ -11,5 +11,5 @@ public class DateGreatThanPeriodInfoBuilder : SpecificationBase<Patient, PeriodI
     }
 
     public override Expression<Func<Patient, bool>> ToExpressions()
-        => patient => Data.EndDate.Date > patient.BirthDate;
+        => patient => Data.EndDate.Date < patient.BirthDate;
 }
