@@ -1,10 +1,10 @@
-﻿using System.Data.Entity;
-using AGSR.Patients.DataSearch.Models;
+﻿using AGSR.Patients.DataSearch.Models;
 using AGSR.Patients.Domain.Entities;
 using AGSR.Patients.Domain.Repositories;
 using AGSR.Patients.Models;
 using AutoMapper;
 using LinqKit;
+using Microsoft.EntityFrameworkCore;
 using PatientEntity = AGSR.Patients.Domain.Entities.Patient;
 
 namespace AGSR.Patients.Services.Implementations
