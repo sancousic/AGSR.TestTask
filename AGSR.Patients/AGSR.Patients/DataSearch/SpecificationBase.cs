@@ -1,16 +1,17 @@
 ﻿using System.Linq.Expressions;
+using AGSR.Patients.DateSearch;
 using AGSR.Patients.Domain.Entities;
 
-namespace AGSR.Patients.DateSearch;
+namespace AGSR.Patients.DataSearch;
 
-public abstract class SpecificationBase<T, D> : ISpecification<T> where T: class, IEntity
+public abstract class SpecificationBase<TEntity, TSearchData> : ISpecification<TEntity> where TEntity: class, IEntity
 {
-    protected D Data { get; }
+    protected TSearchData SearchData { get; }
 
-    public SpecificationBase(D data)
+    public SpecificationBase(TSearchData searchData)
     {
-        Data = data;
+        SearchData = searchData;
     }
 
-    public abstract Expression<Func<T, bool>> ToExpressions();
+    public abstract Expression<Func<TEntity, bool>> ToExpressions();
 }

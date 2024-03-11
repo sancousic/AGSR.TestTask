@@ -2,45 +2,44 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace AGSR.Patients.Domain.Context
+namespace AGSR.Patients.Domain.Context;
+
+public class ConfigContext : DbContext
 {
-    public class ConfigContext : DbContext
+    private const string ConfigConnection = nameof(ConfigConnection);
+
+    private readonly string connectionString;
+
+    public ConfigContext(DbContextOptions<ConfigContext> options, IConfiguration configuration)
     {
-        private const string ConfigConnection = nameof(ConfigConnection);
+        var connectionString = configuration.GetConnectionString(ConfigConnection);
 
-        private readonly string connectionString;
+        this.connectionString = connectionString
+                                ?? throw new ArgumentNullException("No connection string found in configuration");
+    }
 
-        public ConfigContext(DbContextOptions<ConfigContext> options, IConfiguration configuration)
+    public DbSet<Name> Names { get; set; } = null!;
+
+    public DbSet<Patient> Patients { get; set; } = null!;
+
+    public DbSet<GivenName> GivenNames { get; set; } = null!;
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (optionsBuilder is { IsConfigured: false })
         {
-            var connectionString = configuration.GetConnectionString(ConfigConnection);
-
-            this.connectionString = connectionString
-                ?? throw new ArgumentNullException("No connection string found in configuration");
+            optionsBuilder.UseSqlServer(connectionString);
         }
+    }
 
-        public DbSet<Name> Names { get; set; } = null!;
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
 
-        public DbSet<Patient> Patients { get; set; } = null!;
-
-        public DbSet<GivenName> GivenNames { get; set; } = null!;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (optionsBuilder is { IsConfigured: false })
-            {
-                optionsBuilder.UseSqlServer(connectionString);
-            }
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Patient>()
-                .HasOne(p => p.Name)
-                .WithOne(p => p.Patient)
-                .HasForeignKey<Name>(p => p.Id)
-                .OnDelete(DeleteBehavior.Cascade);
-        }
+        modelBuilder.Entity<Patient>()
+            .HasOne(p => p.Name)
+            .WithOne(p => p.Patient)
+            .HasForeignKey<Name>(p => p.Id)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

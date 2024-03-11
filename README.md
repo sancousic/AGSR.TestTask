@@ -17,12 +17,22 @@ dotnet dev-certs https -ep %USERPROFILE%\.aspnet\https\aspnetapp.pfx -p $CREDENT
 dotnet dev-certs https --trust
 ```
 
-And change cert password in docker-compose file:
+Copy `template.env` file to `.env` and set variables.
 
 ```
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=<YOUR PASSWORD HERE>
+- ASPNETCORE_Kestrel__Certificates__Default__Password=<YOUR PASSWORD HERE>
 ```
 
-docker-compose up -d web_api --build
+Then just use `docker-compose up` and go to the [swagger](https://localhost:5001/swagger/index.html).
 
-docker logs web_api_application
+## Data tool
+
+-l, --locale    (Default: en_US) Localization of generated data. See https://github.com/bchavez/Bogus
+
+-u, --url       (Default: https://localhost:5001/) Base URL to AGSR.Patient API.
+
+-c, --count     (Default: 100) Number of entities created.
+
+--help          Display this help screen.
+
+--version       Display version information.

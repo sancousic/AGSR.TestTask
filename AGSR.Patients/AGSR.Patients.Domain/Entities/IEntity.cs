@@ -1,6 +1,5 @@
-﻿namespace AGSR.Patients.Domain.Entities
+﻿namespace AGSR.Patients.Domain.Entities;
+
+public interface IEntity
 {
-    public interface IEntity
-    {
-    }
 }

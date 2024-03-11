@@ -1,28 +1,36 @@
 ﻿using System.Globalization;
 using AGSR.Patients.Constants;
+using AGSR.Patients.DataSearch.Models;
 using AGSR.Patients.DateSearch;
-using AGSR.Patients.Extensions;
 
-namespace AGSR.Patients.DataSearch.Models;
+namespace AGSR.Patients.Services.Implementations;
 
-public class DateSearchModel : DataSearchModel<PeriodInfo>
+public class DateSearchModelBuilder : RangeDataSearchModelBuilder<PeriodInfo>
 {
-    private string? Format { get; set; }
+    private readonly IDateTimeOffsetParser _parser;
 
-    public DateSearchModel(string searchValue) : base(searchValue)
+    public DateSearchModelBuilder(IDateTimeOffsetParser parser)
     {
+        _parser = parser;
     }
 
-    public override void Init()
+    private string? Format { get; set; }
+
+    public override DataSearchModel<PeriodInfo> Build(string searchValue)
     {
-        if (DateTimeOffset.Now.TryParseExactWithFormat(Search[2..], CultureInfo.CurrentCulture,
+        var prefix = GetPrefix(searchValue);
+        var search = prefix == null ? searchValue : searchValue[2..];
+
+        if (_parser.TryParseExactWithFormat(search, CultureInfo.CurrentCulture,
                 DateTimeStyles.AssumeLocal, out var format, out var date))
         {
             Format = format;
 
-            Data = GetEndDate(date.Value);
-
-            return;
+            return new DataSearchModel<PeriodInfo>
+            {
+                Data = GetEndDate(date.Value),
+                Prefix = prefix ?? Prefixes.EqualsPrefix,
+            };
         }
 
         throw new ArgumentException();

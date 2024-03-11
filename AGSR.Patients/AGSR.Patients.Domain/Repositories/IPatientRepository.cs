@@ -1,8 +1,7 @@
 ﻿using AGSR.Patients.Domain.Entities;
 
-namespace AGSR.Patients.Domain.Repositories
+namespace AGSR.Patients.Domain.Repositories;
+
+public interface IPatientRepository : IDomainRepository<Patient>
 {
-    public interface IPatientRepository : IDomainRepository<Patient>
-    {
-    }
 }

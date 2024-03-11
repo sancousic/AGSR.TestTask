@@ -1,15 +1,14 @@
 ﻿using AGSR.Patients.Domain.Enums;
 
-namespace AGSR.Patients.Models
+namespace AGSR.Patients.Models;
+
+public class PatientModel
 {
-    public class PatientModel
-    {
-        public NameModel? Name { get; set; } = new();
+    public NameModel? Name { get; set; } = new();
 
-        public DateTimeOffset BirthDate { get; set; }
+    public DateTimeOffset BirthDate { get; set; }
 
-        public Gender? Gender { get; set; }
+    public Gender? Gender { get; set; }
 
-        public Active? Active { get; set; }
-    }
+    public Active? Active { get; set; }
 }

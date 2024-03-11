@@ -1,16 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AGSR.Patients.Models
+namespace AGSR.Patients.Models;
+
+public class NameModel
 {
-    public class NameModel
-    {
-        public Guid Id { get; set; }
+    public Guid Id { get; set; }
 
-        public string? Use { get; set; }
+    public string? Use { get; set; }
 
-        [Required]
-        public string Family { get; set; } = null!;
+    [Required]
+    public string Family { get; set; } = null!;
 
-        public IEnumerable<string> GivenNames { get; set; } = new List<string>();
-    }
+    public IEnumerable<string> GivenNames { get; set; } = new List<string>();
 }

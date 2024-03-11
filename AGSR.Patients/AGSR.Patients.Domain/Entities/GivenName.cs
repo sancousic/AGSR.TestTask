@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AGSR.Patients.Domain.Entities
+namespace AGSR.Patients.Domain.Entities;
+
+public class GivenName : IEntity
 {
-    public class GivenName : IEntity
-    {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid? Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid? Id { get; set; }
 
-        public string? Value { get; set; }
+    public string? Value { get; set; }
 
-        public Name Name { get; set; } = null!;
-    }
+    public Name Name { get; set; } = null!;
 }
